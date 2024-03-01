@@ -10,7 +10,7 @@ import {
   getProfiles,
   getUsers,
   gqlQuery,
-  subscribeTo,
+  subscribeTo, 
 } from '../utils/requests.js';
 import { MemberTypeId } from '../../src/routes/member-types/schemas.js';
 
