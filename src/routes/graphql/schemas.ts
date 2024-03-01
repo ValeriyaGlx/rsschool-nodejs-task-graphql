@@ -1,6 +1,5 @@
 import { Type } from '@fastify/type-provider-typebox';
 import { GraphQLBoolean, GraphQLEnumType, GraphQLFloat, GraphQLInt, GraphQLObjectType, GraphQLString } from 'graphql';
-import { MemberTypeId } from '../member-types/schemas.js';
 import { UUIDType } from './types/uuid.js';
 
 export const gqlResponseSchema = Type.Partial(
@@ -22,18 +21,18 @@ export const createGqlResponseSchema = {
   ),
 };
 
-export const MemberTypeIdEnum = new GraphQLEnumType({
-  name: 'MemberId',
+export const MemberTypeId = new GraphQLEnumType({
+  name: 'MemberTypeId',
   values: {
-    BASIC: {value: MemberTypeId.BASIC},
-    BUSINESS: {value: MemberTypeId.BUSINESS}
-  }
+    basic: { value: 'basic' },
+    business: { value: 'business' },
+  },
 });
 
 export const MemberType = new GraphQLObjectType({
-  name: 'Member',
+  name: 'MemberType',
   fields: () => ({
-    id: { type: MemberTypeIdEnum },
+    id: { type: MemberTypeId },
     discount: { type: GraphQLFloat },
     postsLimitPerMonth: { type: GraphQLInt },
   })

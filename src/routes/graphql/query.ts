@@ -1,9 +1,8 @@
 import { GraphQLList, GraphQLObjectType } from "graphql";
-import { MemberType, MemberTypeIdEnum, PostType, ProfileType, UserType } from "./schemas.js";
+import { MemberType, MemberTypeId, PostType, ProfileType, UserType } from "./schemas.js";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library.js";
 import { UUIDType } from "./types/uuid.js";
-import { MemberTypeId } from "../member-types/schemas.js";
 import { getAllUsers, getUser } from "../../models/user.js";
 import { getAllProfiles, getProfile } from "../../models/profile.js";
 import { getAllPosts, getPost } from "../../models/post.js";
@@ -30,14 +29,12 @@ export const MyAppQueryRootType = (prisma: PrismaClient<Prisma.PrismaClientOptio
       type: new GraphQLList(PostType),
       resolve:  () => getAllPosts(prisma),
     },
-
-    // TODO find bug
     memberType: {
       type: MemberType,
       args: {
-        id: { type: MemberTypeIdEnum }
+        id: { type: MemberTypeId }
       },
-      resolve: (_, { id }: { id: MemberTypeId }) => getMember(prisma, id)
+      resolve: (_, { id }: { id: string }) => getMember(prisma, id)
     },
     post: {
       type: PostType,
