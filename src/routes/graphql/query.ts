@@ -44,7 +44,7 @@ export const MyAppQueryRootType = (prisma: PrismaClient<Prisma.PrismaClientOptio
       resolve: (_, { id }: { id: string }) => getPost(prisma, id),
     },
     user: {
-      type: UserType,
+      type: UserType as GraphQLObjectType,
       args: {
         id: { type: UUIDType }
       },

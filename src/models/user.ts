@@ -12,4 +12,3 @@ export const getUser = async (prisma: PrismaType, id: string) => {
   const user = await prisma.user.findUnique({where: { id },});
   return user;
 }
- 
