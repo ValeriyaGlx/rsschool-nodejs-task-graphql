@@ -1,14 +1,9 @@
 import { Type } from '@fastify/type-provider-typebox';
-import { GraphQLBoolean, GraphQLEnumType, GraphQLFloat, GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from 'graphql';
+import { GraphQLBoolean, GraphQLEnumType, GraphQLFloat, GraphQLInputObjectType, GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from 'graphql';
 import { UUIDType } from './types/uuid.js';
 import { Context } from 'vm';
 import { Profile, User } from '@prisma/client';
-import { Prisma, PrismaClient } from "@prisma/client";
-import { DefaultArgs } from "@prisma/client/runtime/library.js";
-
-type PrismaType = PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>
-
-
+import { PrismaType } from './types/prisma.js';
 
 export const gqlResponseSchema = Type.Partial(
   Type.Object({
@@ -81,7 +76,7 @@ export const UserType = new GraphQLObjectType({
   fields: () => { return {
     id: { type: UUIDType },
     name: { type: GraphQLString },
-    balance: { type: GraphQLInt },
+    balance: { type: GraphQLFloat },
     profile: { 
       type: ProfileType, 
       resolve: async (source: User, _, { prisma }: Context) => {
@@ -134,4 +129,31 @@ export const UserType = new GraphQLObjectType({
     }
     }
   }
+});
+
+export const CreatePostInputType = new GraphQLInputObjectType({
+  name: 'CreatePostInput',
+  fields: {
+    authorId: { type: UUIDType },
+    content: { type: GraphQLString },
+    title: { type: GraphQLString },
+  },
+});
+
+export const CreateProfileInputType = new GraphQLInputObjectType({
+  name: 'CreateProfileInput',
+  fields: {
+    userId: { type: UUIDType },
+    isMale: { type: GraphQLBoolean },
+    yearOfBirth: { type: GraphQLInt },
+    memberTypeId: { type: GraphQLString },
+  },
+});
+
+export const CreateUserInputType = new GraphQLInputObjectType({
+  name: 'CreateUserInput',
+  fields: {
+    name: { type: GraphQLString },
+    balance: { type: GraphQLFloat },
+  },
 });

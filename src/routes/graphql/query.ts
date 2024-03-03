@@ -1,16 +1,15 @@
 import { GraphQLList, GraphQLObjectType } from "graphql";
 import { MemberType, MemberTypeId, PostType, ProfileType, UserType } from "./schemas.js";
-import { Prisma, PrismaClient } from "@prisma/client";
-import { DefaultArgs } from "@prisma/client/runtime/library.js";
 import { UUIDType } from "./types/uuid.js";
 import { getAllUsers, getUser } from "../../models/user.js";
 import { getAllProfiles, getProfile } from "../../models/profile.js";
 import { getAllPosts, getPost } from "../../models/post.js";
 import { getAllMembers, getMember } from "../../models/member.js";
+import { PrismaType } from "./types/prisma.js";
 
 
-export const MyAppQueryRootType = (prisma: PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>) => {  
-  return new GraphQLObjectType({
+export const MyAppQueryRootType = (prisma: PrismaType) => {  
+  return new GraphQLObjectType({ 
   name: 'RootQueryType',
   fields: {
     memberTypes: {

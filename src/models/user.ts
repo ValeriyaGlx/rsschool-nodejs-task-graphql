@@ -1,7 +1,6 @@
-import { Prisma, PrismaClient } from "@prisma/client";
-import { DefaultArgs } from "@prisma/client/runtime/library.js";
+import { User } from "@prisma/client";
+import { PrismaType } from "../routes/graphql/types/prisma.js";
 
-type PrismaType = PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>
 
 export const getAllUsers = async (prisma: PrismaType) => {
   const users = await prisma.user.findMany();
@@ -11,4 +10,15 @@ export const getAllUsers = async (prisma: PrismaType) => {
 export const getUser = async (prisma: PrismaType, id: string) => {
   const user = await prisma.user.findUnique({where: { id },});
   return user;
-}
+};
+
+export const createUser = async (prisma: PrismaType, dto: User) => {
+  const user = await prisma.user.create({ data: dto });
+  return user;
+};
+
+export const deleteUser = async (prisma: PrismaType, id: string) => {
+  await prisma.user.delete({ where: {id}});
+
+  return null;
+};
