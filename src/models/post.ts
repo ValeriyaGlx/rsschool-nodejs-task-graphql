@@ -22,4 +22,13 @@ export const deletePost = async (prisma: PrismaType, id: string) => {
 
   return null;
 };
+
+export const updatePost = async (prisma: PrismaType, dto: Post, id: string) => {
+  const user = await prisma.post.update({
+    where: { id },
+    data: dto,
+  });
+
+  return user;
+}
  
