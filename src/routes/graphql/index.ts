@@ -5,6 +5,7 @@ import { createGqlResponseSchema, gqlResponseSchema } from './schemas.js';
 import { GraphQLSchema, graphql, parse, Source } from 'graphql';
 import { MyAppQueryRootType } from './query.js';
 import { MyAppMutationRootType } from './mutation.js';
+import { loader } from '../loader/createLoader.js';
 
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
@@ -32,6 +33,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
     
     if (errors.length) await res.send({ data: null, errors });
 
+    const dataLoader = loader(prisma);
 
       const response = await graphql({
         schema,
@@ -39,6 +41,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         variableValues: variables,
         contextValue: {
           prisma,
+          dataLoader,
         },
       });
 
