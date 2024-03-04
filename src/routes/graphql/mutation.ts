@@ -6,6 +6,7 @@ import { createPost, deletePost, updatePost } from "../../models/post.js";
 import { createProfile, deleteProfile, updateProfile } from "../../models/profile.js";
 import { Post, Profile, User } from "@prisma/client";
 import { UUIDType } from "./types/uuid.js";
+import { Context } from "vm";
 
 export const MyAppMutationRootType  = (prisma: PrismaType) => {
   return new GraphQLObjectType({ 
@@ -55,6 +56,46 @@ export const MyAppMutationRootType  = (prisma: PrismaType) => {
         type: ProfileType,
         args: { dto: { type: ChangeProfileInputType }, id: { type: UUIDType } },
         resolve: (_, { dto, id }: { dto: Profile, id: string }) => updateProfile(prisma, dto, id),
+      },
+      subscribeTo: {
+        type: UserType as GraphQLObjectType,
+        args: {
+          userId: { type: UUIDType },
+          authorId: { type: UUIDType },
+        },
+        resolve: async (_, { userId, authorId }: { userId: string; authorId: string }, { prisma }: Context) =>
+        await (prisma as PrismaType).user.update({
+          where: { id: userId },
+          data: {
+            userSubscribedTo: {
+              create: {
+                authorId,
+              },
+            },
+          },
+        })
+      },
+      
+      unsubscribeFrom: {
+        type: GraphQLString,
+        args: {
+          userId: { type: UUIDType },
+          authorId: { type: UUIDType },
+        },
+        resolve: async (_, { userId, authorId }: { userId: string; authorId: string }, { prisma }: Context) => {
+          await (prisma as PrismaType).user.update({
+            where: { id: userId },
+            data: {
+              userSubscribedTo: {
+                deleteMany: {
+                  authorId,
+                },
+              },
+            },
+          });
+
+          return null;
+        }
       },
       
 
