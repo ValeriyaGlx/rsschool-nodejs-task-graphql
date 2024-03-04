@@ -53,8 +53,9 @@ await test('gql-mutations', async (t) => {
     t.ok(!errors);
     t.ok(foundCreatedPost);
     t.ok(foundCreatedUser);
-    t.ok(foundCreatedProfile);
+    t.ok(foundCreatedProfile);    
   });
+  
 
   await t.test('Create profile => fail; invalid dto.yearOfBirth.', async (t) => {
     const {
